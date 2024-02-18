@@ -62,47 +62,62 @@ function getRandomInt(min, max) {
 function done() {
 	document.getElementById('ticket').innerHTML = '<div id="title" onclick="changeTitle()">Билет *нажми меня*</div>';
 
-	let Nums = [];
+	let Matr = [];
+	for (let i = 0; i < 9; i++) {
 	
-	for (let i = 1; i < 91; i++)
-		Nums.push(i);
-
-	shuffle(Nums);
-	
-	
-	function GetBlock() {
-		let numsStr = '';
-		for (let i = 0; i < 3; i++) {
-			numsStr += '<tr>';
+		let Nums = [];
+		for (let j = 1; j < 11; j++)
+			Nums.push(j + (i * 10));
+		shuffle(Nums);
+		
+		for (let j = 1; j < 5; j++)
+			Nums.splice(0, 1);
 			
-			// В строке всего 5 символов, генерируем случайные 5 индексов из 10
-			let ExcludeCells = [];
-			for (let m = 0; m < 9; m++)
-				ExcludeCells.push(m);
-
-			
-			// Удаляем лишние
-			shuffle(ExcludeCells);
-			for (let m = 0; m < 5; m++)
-				ExcludeCells.splice(0, 1);
-				
-			let Rand = 0;
-			
-			for (let j = 0; j < 9; j++) {
-				if (ExcludeCells.indexOf(j) == -1) {
-					Rand = getRandomInt(0, Nums.length - 1);
-					numsStr += '<td>' + Nums[Rand] + '</td>';
-					Nums.splice(Rand, 1);
-				} else 
-					numsStr += '<td></td>';
-			}
-			numsStr += '</tr>';
-		}
-		document.getElementById('ticket').innerHTML += '<table><tbody>' + numsStr + '</tbody></table>';
+		Matr.push(Nums);
 	}
+	
+	let Matr2 = [];
+	
+	// Вращаем назад
+	for (let i = 0; i < 6; i++) {
+		let Nums = [];
+		for (let j = 0; j < 9; j++) 
+			Nums.push(Matr[j][i]);
+		Matr2.push(Nums);
+	}
+	
+	let numsStr = '';
+	let numsStr2 = '';
+	
+	for (let i = 0; i < 6; i++) {
+		if (i == 3) {
+			numsStr2 = numsStr;
+			numsStr = '';
+		}
+		numsStr += '<tr>';
+		
+		// В строке всего 5 символов, генерируем случайные 5 индексов из 10
+		let ExcludeCells = [];
+		for (let m = 0; m < 9; m++)
+			ExcludeCells.push(m);
 
-	GetBlock();
-	GetBlock();
+		// Удаляем лишние
+		shuffle(ExcludeCells);
+		for (let m = 0; m < 5; m++)
+			ExcludeCells.splice(0, 1);
+			
+		let Rand = 0;
+		
+		for (let j = 0; j < 9; j++) {
+			if (ExcludeCells.indexOf(j) == -1) {
+				numsStr += '<td>' + Matr2[i][j] + '</td>';
+			} else 
+				numsStr += '<td></td>';
+		}
+		numsStr += '</tr>';
+	}
+	document.getElementById('ticket').innerHTML += '<table><tbody>' + numsStr2 + '</tbody></table>';
+	document.getElementById('ticket').innerHTML += '<table><tbody>' + numsStr + '</tbody></table>';
 }
 
 function changeTitle() {
