@@ -29,14 +29,15 @@ body{margin:0; padding:0; font-family:arial, helvetica, sans-serif; font-size:14
 
 table{border-collapse: collapse;}
 table tr{background-color:#f9fafb;}
-table td{background-color:#fafafb; border:1px solid #dddddd; min-width:17px;}
+table td{background-color:rgba(255, 255, 255, 0.4); border:1px solid #dddddd; min-width:17px;}
 table th{border:1px solid #dddddd;}
 table{margin:10px auto; text-align:center;}
 td, th{padding:10px; vertical-align: top;}
-table tr:nth-child(odd) td{background-color:white;}
+table tr:nth-child(odd) td{background-color:rgba(255, 255, 255, 0.3);}
 
-#ticket{display:inline-block; padding:10px; border:2px solid #ffcd17; border-radius:15px;}
-#title{font-size:20px;}
+#ticket{margin:0 auto; display:flex; justify-content:center; align-items:center; width:1116px; height:437px; background-image:url(ticket.jpg); }
+#numbers{display:inline-block; padding:10px; margin-right:60px; border-radius:15px; background-color:rgba(255, 255, 255, 0.3);}
+#title{font-size:20px; }
 
 *:focus {outline: none;}
 </style>
@@ -60,7 +61,7 @@ function getRandomInt(min, max) {
 }
 
 function done() {
-	document.getElementById('ticket').innerHTML = '<div id="title" onclick="changeTitle()">Билет *нажми меня*</div>';
+	document.getElementById('numbers').innerHTML = '<div id="title" onclick="changeTitle()">Билет *нажми меня*</div>';
 
 	let Matr = [];
 	for (let i = 0; i < 9; i++) {
@@ -116,8 +117,8 @@ function done() {
 		}
 		numsStr += '</tr>';
 	}
-	document.getElementById('ticket').innerHTML += '<table><tbody>' + numsStr2 + '</tbody></table>';
-	document.getElementById('ticket').innerHTML += '<table><tbody>' + numsStr + '</tbody></table>';
+	document.getElementById('numbers').innerHTML += '<table><tbody>' + numsStr2 + '</tbody></table>';
+	document.getElementById('numbers').innerHTML += '<table><tbody>' + numsStr + '</tbody></table>';
 }
 
 function changeTitle() {
@@ -133,8 +134,9 @@ document.addEventListener('DOMContentLoaded', function(){
 </head>
 <body>
 	<div id="wrapper">
-		<div id="ticket"></div>
-		<br><br>
+		<div id="ticket">
+			<div id="numbers"></div>
+		</div>
 		<div class="button" onclick="done()">Новый билет</div>
 	</div>
 </body>
