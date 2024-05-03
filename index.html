@@ -40,8 +40,14 @@ table tr:nth-child(odd) td{background-color:rgba(255, 255, 255, 0.3);}
 #title{font-size:20px; }
 
 *:focus {outline: none;}
+
+#tickets{width:800px; height:200px;}
 </style>
 <script type="text/javascript">
+let numsOut = '';
+let numsOut2 = '';
+let counter = 0;
+
 function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
   while (currentIndex > 0) {
@@ -68,13 +74,32 @@ function done() {
 	
 		let Nums = [];
 		for (let j = 1; j < 11; j++)
-			Nums.push(j + (i * 10));
+			Nums.push(j + (i * 10) - 1);
+			
+		// 0 заменяем на 10, в первом десятке
+		if (i == 0) //{
+			//console.log(Nums);
+			Nums[0] = 10;
+			//console.log(Nums);
+		//}
+			
+		// Заменяем случайным образом случайное число на 90, последнем десятке
+		if (i == 8) //{
+			//console.log(Nums);
+			if (getRandomInt(0, 1) == 1)
+				Nums[getRandomInt(0, 10)] = 90;
+			//console.log(Nums);
+		//}
+		
+		// Мешаем
+		shuffle(Nums);
 		shuffle(Nums);
 		
+		// Отрезаем 4 цифры
 		for (let j = 1; j < 5; j++)
 			Nums.splice(0, 1);
 			
-		Matr.push(Nums);
+		Matr.push(Nums);	
 	}
 	
 	let Matr2 = [];
@@ -88,12 +113,16 @@ function done() {
 	}
 	
 	let numsStr = '';
+	numsOut = '';
 	let numsStr2 = '';
+	numsOut2 = '';
 	
 	for (let i = 0; i < 6; i++) {
 		if (i == 3) {
 			numsStr2 = numsStr;
+			numsOut2 = numsOut;
 			numsStr = '';
+			numsOut = '';
 		}
 		numsStr += '<tr>';
 		
@@ -112,8 +141,11 @@ function done() {
 		for (let j = 0; j < 9; j++) {
 			if (ExcludeCells.indexOf(j) == -1) {
 				numsStr += '<td>' + Matr2[i][j] + '</td>';
-			} else 
+				numsOut += Matr2[i][j] + ' ';
+			} else {
 				numsStr += '<td></td>';
+				//numsOut += '-;';
+			}
 		}
 		numsStr += '</tr>';
 	}
@@ -121,10 +153,47 @@ function done() {
 	document.getElementById('numbers').innerHTML += '<table><tbody>' + numsStr + '</tbody></table>';
 }
 
+function done2() {
+	done();
+	counter++;
+	document.getElementById('title').innerHTML = 'Билет ' + counter;
+	document.getElementById('tickets').value += 'Билет ' + counter + ', цифры: ' + numsOut + numsOut2 + '\n';
+}
+
 function changeTitle() {
 	let name = prompt('Название:', '');
-	if (name != null && name.trim() != '')
+	if (name != null && name.trim() != '') {
 		document.getElementById('title').innerHTML = 'Билет ' + name;
+		document.getElementById('tickets').value += 'Билет ' + name + ', цифры: ' + numsOut + numsOut2 + '\n';
+	}
+}
+
+function CopyToClipboard(str) {
+	navigator.clipboard.writeText(str).then(function() {
+	}, function(err) {
+	});
+}
+
+function ExcludeTickets() {
+	let Numbers = prompt('Введите цифры через запятую:');
+	if (Numbers === null || Numbers.trim() == '') return;
+	
+	Numbers = Numbers.trim().split(',');
+	console.log(Numbers);
+
+	let List = document.getElementById('tickets').value.trim().split(/\n/);
+    for (let i = List.length - 1; i >= 0; i--) {
+		let Found = false;
+		
+		for (let j = 0; j < Numbers.length; j++)
+			if (List[i].indexOf(' ' + Numbers[j].trim() + ' ') != -1) {
+				//console.log('Удален билет: ' + List[i])
+				List.splice(i, 1);
+				break;
+			}
+	}
+	
+	document.getElementById('tickets').value = List.join('\n') + '\n';
 }
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -138,6 +207,11 @@ document.addEventListener('DOMContentLoaded', function(){
 			<div id="numbers"></div>
 		</div>
 		<div class="button" onclick="done()">Новый билет</div>
+		<div class="button" onclick="done2()">Следующий 1,2,3...</div>
+		<br><br>
+		<textarea id="tickets" placeholder="Билеты" autocomplete="off"></textarea><br><br>
+		<div class="button" onclick="CopyToClipboard(document.getElementById('tickets').value)">Скопировать</div>
+		<div class="button" onclick="ExcludeTickets()">Исключить с невыпавшими числами</div>
 	</div>
 </body>
 </html>
