@@ -183,6 +183,8 @@ function changeTitle() {
 	if (name != null && name.trim() != '') {
 		document.getElementById('title').innerHTML = 'Билет ' + name;
 		document.getElementById('tickets').value += 'Билет ' + name + ', цифры: ' + numsOut + numsOut2 + '\n';
+		if (!isNaN(name))
+			counter = parseInt(name, 10);
 	}
 }
 
