@@ -36,13 +36,14 @@ td, th{padding:10px; vertical-align: top;}
 table tr:nth-child(odd) td{background-color:rgba(255, 255, 255, 0.3);}
 
 #ticket{margin:0 auto; display:flex; justify-content:center; align-items:center; width:1116px; height:437px; background-image:url(ticket.jpg); }
-#numbers{display:inline-block; padding:10px; margin-right:60px; border-radius:15px; background-color:rgba(255, 255, 255, 0.3);}
+#numbers{display:inline-block; padding:10px; margin-right:60px; border-radius:15px; background-color:rgba(0, 0, 0, 0.05);}
 #title{font-size:20px; }
 
 *:focus {outline: none;}
 
 #tickets{width:800px; height:200px;}
 </style>
+<script src="html2canvas.min.js"></script>
 <script type="text/javascript">
 let numsOut = '';
 let numsOut2 = '';
@@ -133,6 +134,7 @@ function done() {
 
 		// Удаляем лишние
 		shuffle(ExcludeCells);
+		shuffle(ExcludeCells);
 		for (let m = 0; m < 5; m++)
 			ExcludeCells.splice(0, 1);
 			
@@ -153,11 +155,27 @@ function done() {
 	document.getElementById('numbers').innerHTML += '<table><tbody>' + numsStr + '</tbody></table>';
 }
 
+function DownloadTicket() {
+	let ticketElement = document.getElementById('ticket');
+	let ticketTitle = document.getElementById('title').innerText.replaceAll('*', '').replaceAll(' ', '_');
+
+	html2canvas(ticketElement).then(canvas => {
+		let link = document.createElement('a');
+		link.download = ticketTitle + '.png';
+		link.href = canvas.toDataURL();
+		link.click();
+	}).catch(err => {
+		//console.error('Error generating image:', err);
+	});
+}
+
 function done2() {
 	done();
 	counter++;
 	document.getElementById('title').innerHTML = 'Билет ' + counter;
 	document.getElementById('tickets').value += 'Билет ' + counter + ', цифры: ' + numsOut + numsOut2 + '\n';
+	if (document.getElementById('autoDownload').checked)
+		DownloadTicket();
 }
 
 function changeTitle() {
@@ -208,8 +226,12 @@ document.addEventListener('DOMContentLoaded', function(){
 		</div>
 		<div class="button" onclick="done()">Новый билет</div>
 		<div class="button" onclick="done2()">Следующий 1,2,3...</div>
+		<div class="button" onclick="DownloadTicket()">Скачать</div>
+		<input type="checkbox" id="autoDownload" name="autoDownload" checked />
+		<label for="autoDownload">Авто-скачивание</label>
 		<br><br>
 		<textarea id="tickets" placeholder="Билеты" autocomplete="off"></textarea><br><br>
+<div class="button" onclick="document.getElementById('tickets').value=''">Очистить</div>
 		<div class="button" onclick="CopyToClipboard(document.getElementById('tickets').value)">Скопировать</div>
 		<div class="button" onclick="ExcludeTickets()">Исключить с невыпавшими числами</div>
 	</div>
