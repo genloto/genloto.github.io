@@ -216,6 +216,13 @@ function ExcludeTickets() {
 	document.getElementById('tickets').value = List.join('\n') + '\n';
 }
 
+function ChangeBG() {
+    let url = prompt('Введите прямую ссылку на картинку:');
+    if (url) {
+        document.getElementById("ticket").style.backgroundImage = 'url(' + url + ')';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function(){
 	done();
 });
@@ -231,6 +238,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		<div class="button" onclick="DownloadTicket()">Скачать</div>
 		<input type="checkbox" id="autoDownload" name="autoDownload" checked />
 		<label for="autoDownload">Авто-скачивание</label>
+		<div class="button" onclick="ChangeBG()">Фон</div>
 		<br><br>
 		<textarea id="tickets" placeholder="Билеты" autocomplete="off"></textarea><br><br>
 <div class="button" onclick="document.getElementById('tickets').value=''">Очистить</div>
