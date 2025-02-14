@@ -102,10 +102,26 @@ function done() {
 		shuffle(Nums);
 		
 		// Отрезаем 4 цифры
-		for (let j = 1; j < 5; j++)
-			Nums.splice(0, 1);
+		let SkipSecond = false; // Выкидываем 10ку во втором
+		if (Matr.length > 0) {
+			if (Matr.length == 1)
+				//alert(Matr[0]);
+				SkipSecond = true;
+		}
+		
+		if (SkipSecond == false)
+			Nums.splice(0, 4);
+		else {
+			let NumCount = 4;
+			let index = Nums.indexOf(10);
+			if (index > -1) {
+				Nums.splice(index, 1);
+				NumCount--;
+			}
+			Nums.splice(0, NumCount);
+		}
 			
-		Matr.push(Nums);	
+		Matr.push(Nums);
 	}
 	
 	let Matr2 = [];
@@ -242,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		<div class="button" onclick="done2()">Следующий 1,2,3...</div>
 		<div class="button" onclick="DownloadTicket()">Скачать</div>
 		<input type="checkbox" id="autoDownload" name="autoDownload" checked />
-		<label for="autoDownload">Авто-скачивание</label>
+		<label for="autoDownload">Авто-скачивание</label>  
 		<div class="button" onclick="ChangeBG()">Фон</div>
 		<br><br>
 		<textarea id="tickets" placeholder="Билеты" autocomplete="off"></textarea><br><br>
